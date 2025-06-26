@@ -5,3 +5,9 @@ export const TICKET_ICONS = {
   IN_PROGRESS: <PencilIcon />,
   DONE: <CircleCheckIcon />,
 };
+
+export const TICKET_STATUS_LABELS = {
+  OPEN: 'Open',
+  DONE: 'Done',
+  IN_PROGRESS: 'In Progress',
+};

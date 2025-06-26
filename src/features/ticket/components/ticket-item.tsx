@@ -2,13 +2,24 @@
 
 import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
-import { PencilIcon, SquareArrowOutUpRightIcon, TrashIcon } from 'lucide-react';
+import {
+  MoreVerticalIcon,
+  PencilIcon,
+  SquareArrowOutUpRightIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { TICKET_ICONS } from '@/features/ticket/constants';
 import { ticketEditPath, ticketPath } from '@/paths';
-import { deleteTicket } from '../actions/delete-ticket';
+import { toCurrencyFromCent } from '@/utils/currency';
+import { TicketMoreMenu } from './ticket-more-menu';
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -32,12 +43,15 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </Button>
   );
 
-  const deleteButton = (
-    <form action={deleteTicket.bind(null, ticket.id)}>
-      <Button variant="outline" size="icon">
-        <TrashIcon className="h-4 w-4" />
-      </Button>
-    </form>
+  const moreMenu = (
+    <TicketMoreMenu
+      ticket={ticket}
+      trigger={
+        <Button variant="outline" size="icon">
+          <MoreVerticalIcon className="h-4 w-4" />
+        </Button>
+      }
+    />
   );
 
   return (
@@ -64,13 +78,20 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
             {ticket.content}
           </span>
         </CardContent>
+
+        <CardFooter className="flex justify-between">
+          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+          <p className="text-sm text-muted-foreground">
+            {toCurrencyFromCent(ticket.bounty)}
+          </p>
+        </CardFooter>
       </Card>
 
       <div className="flex flex-col gap-y-1">
         {isDetail ? (
           <>
             {editButton}
-            {deleteButton}
+            {moreMenu}
           </>
         ) : (
           <>
