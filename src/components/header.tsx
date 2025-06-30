@@ -1,11 +1,10 @@
 'use client';
 
-import { KanbanIcon, LogOutIcon } from 'lucide-react';
+import { KanbanIcon } from 'lucide-react';
 import Link from 'next/link';
-import { signOut } from '@/features/auth/actions/sign-out';
 import { useAuth } from '@/features/auth/hooks/use-auth';
-import { homePath, signInPath, signUpPath, ticketsPath } from '@/paths';
-import { SubmitButton } from './form/submit-button';
+import { homePath, signInPath, signUpPath } from '@/paths';
+import { AccountDropdown } from './account-dropdown';
 import { ThemeSwitcher } from './theme/theme-switcher';
 import { buttonVariants } from './ui/button';
 
@@ -17,17 +16,7 @@ const Header = () => {
   }
 
   const navItems = user ? (
-    <>
-      <Link
-        href={ticketsPath()}
-        className={buttonVariants({ variant: 'outline' })}
-      >
-        Tickets
-      </Link>
-      <form action={signOut}>
-        <SubmitButton label="Sign Out" icon={<LogOutIcon />} />
-      </form>
-    </>
+    <AccountDropdown user={user} />
   ) : (
     <>
       <Link
@@ -46,7 +35,13 @@ const Header = () => {
   );
 
   return (
-    <nav className="animate-header-from-top supports-backdrop-blur:bg-background/60 fixed left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur w-full flex justify-between py-2.5 px-5">
+    <nav
+      className="animate-header-from-top
+        supports-backdrop-blur:bg-background/60
+        fixed left-0 right-0 top-0 z-20
+        border-b bg-background/95 backdrop-blur
+        w-full flex py-2.5 px-5 justify-between"
+    >
       <div className="flex align-items gap-x-2">
         <Link
           href={homePath()}
