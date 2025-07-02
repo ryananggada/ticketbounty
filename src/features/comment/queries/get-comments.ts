@@ -2,12 +2,12 @@ import { getAuth } from '@/features/auth/queries/get-auth';
 import { isOwner } from '@/features/auth/utils/is-owner';
 import { prisma } from '@/lib/prisma';
 
-export const getTicket = async (id: string) => {
+export const getComments = async (ticketId: string) => {
   const { user } = await getAuth();
 
-  const ticket = await prisma.ticket.findUnique({
+  const comments = await prisma.comment.findMany({
     where: {
-      id,
+      ticketId,
     },
     include: {
       user: {
@@ -16,11 +16,13 @@ export const getTicket = async (id: string) => {
         },
       },
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
 
-  if (!ticket) {
-    return null;
-  }
-
-  return { ...ticket, isOwner: isOwner(user, ticket) };
+  return comments.map((comment) => ({
+    ...comment,
+    isOwner: isOwner(user, comment),
+  }));
 };
