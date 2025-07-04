@@ -3,7 +3,7 @@ import { Placeholder } from '@/components/placeholder';
 import { Button } from '@/components/ui/button';
 import { homePath } from '@/paths';
 
-export default function NotFound() {
+const NotFoundPage = () => {
   return (
     <Placeholder
       label="Page not found"
@@ -14,4 +14,6 @@ export default function NotFound() {
       }
     />
   );
-}
+};
+
+export default NotFoundPage;

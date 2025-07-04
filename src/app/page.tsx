@@ -9,7 +9,7 @@ type HomePageProps = {
   searchParams: Promise<SearchParams>;
 };
 
-export default async function HomePage({ searchParams }: HomePageProps) {
+const HomePage = async ({ searchParams }: HomePageProps) => {
   return (
     <div className="flex-1 flex flex-col gap-y-8">
       <Heading
@@ -24,4 +24,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </Suspense>
     </div>
   );
-}
+};
+
+export default HomePage;

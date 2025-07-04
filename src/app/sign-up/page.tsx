@@ -3,7 +3,7 @@ import { CardCompact } from '@/components/card-compact';
 import { SignUpForm } from '@/features/auth/components/sign-up-form';
 import { signInPath } from '@/paths';
 
-export default function SignUpPage() {
+const SignUpPage = () => {
   return (
     <div className="flex-1 flex flex-col justify-center items-center">
       <CardCompact
@@ -19,4 +19,6 @@ export default function SignUpPage() {
       />
     </div>
   );
-}
+};
+
+export default SignUpPage;

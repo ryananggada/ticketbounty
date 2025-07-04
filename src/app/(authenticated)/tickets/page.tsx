@@ -12,7 +12,7 @@ type TicketsPageProps = {
   searchParams: Promise<SearchParams>;
 };
 
-export default async function TicketsPage({ searchParams }: TicketsPageProps) {
+const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
   const { user } = await getAuth();
 
   return (
@@ -34,4 +34,6 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
       </Suspense>
     </div>
   );
-}
+};
+
+export default TicketsPage;

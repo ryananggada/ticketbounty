@@ -12,7 +12,7 @@ type TicketEditPageProps = {
   }>;
 };
 
-export default async function TicketEditPage({ params }: TicketEditPageProps) {
+const TicketEditPage = async ({ params }: TicketEditPageProps) => {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId);
 
@@ -44,4 +44,6 @@ export default async function TicketEditPage({ params }: TicketEditPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default TicketEditPage;
