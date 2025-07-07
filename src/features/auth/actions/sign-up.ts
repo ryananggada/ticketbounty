@@ -9,10 +9,13 @@ import {
   toActionState,
 } from '@/components/form/utils/to-action-state';
 import { hashPassword } from '@/features/password/utils/hash-and-verify';
+import { inngest } from '@/lib/inngest';
 import { createSession } from '@/lib/oslo';
 import { prisma } from '@/lib/prisma';
 import { ticketsPath } from '@/paths';
 import { generateRandomToken } from '@/utils/crypto';
+import { sendEmailVerification } from '../emails/send-email-verification';
+import { generateEmailVerificationCode } from '../utils/generate-email-verification-code';
 import { setSessionCookie } from '../utils/session-cookie';
 
 const signUpSchema = z
@@ -50,6 +53,19 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
     const user = await prisma.user.create({
       data: { username, email, passwordHash },
     });
+
+    await inngest.send({
+      name: 'app/auth.sign-up',
+      data: {
+        userId: user.id,
+      },
+    });
+
+    const verificationToken = await generateEmailVerificationCode(
+      user.id,
+      email,
+    );
+    await sendEmailVerification(username, email, verificationToken);
 
     const sessionToken = generateRandomToken();
     const session = await createSession(sessionToken, user.id);

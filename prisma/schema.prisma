@@ -31,14 +31,16 @@ model Ticket {
 }
 
 model User {
-  id                  String               @id @default(cuid())
-  username            String               @unique
-  email               String               @unique
-  passwordHash        String
-  sessions            Session[]
-  tickets             Ticket[]
-  comments            Comment[]
-  passwordResetTokens PasswordResetToken[]
+  id                      String                   @id @default(cuid())
+  username                String                   @unique
+  email                   String                   @unique
+  emailVerified           Boolean                  @default(false)
+  passwordHash            String
+  sessions                Session[]
+  tickets                 Ticket[]
+  comments                Comment[]
+  passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
 }
 
 model Comment {
@@ -66,6 +68,17 @@ model Session {
 model PasswordResetToken {
   tokenHash String   @unique
   expiresAt DateTime
+  userId    String
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  code      String
+  expiresAt DateTime
+  email     String
   userId    String
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 
