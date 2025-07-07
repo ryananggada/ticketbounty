@@ -8,6 +8,7 @@ import {
 } from '@/components/form/utils/to-action-state';
 import { getAuthOrRedirect } from '@/features/auth/queries/get-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
+import { sendEmailPasswordReset } from '../emails/send-email-password-reset';
 import { generatePasswordResetLink } from '../utils/generate-password-reset-link';
 import { verifyPasswordHash } from '../utils/hash-and-verify';
 
@@ -41,8 +42,7 @@ export const passwordChange = async (
     }
 
     const passwordResetLink = await generatePasswordResetLink(user.id);
-
-    console.log(passwordResetLink);
+    await sendEmailPasswordReset(user.username, user.email, passwordResetLink);
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }

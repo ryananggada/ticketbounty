@@ -7,6 +7,7 @@ import {
   toActionState,
 } from '@/components/form/utils/to-action-state';
 import { prisma } from '@/lib/prisma';
+import { sendEmailPasswordReset } from '../emails/send-email-password-reset';
 import { generatePasswordResetLink } from '../utils/generate-password-reset-link';
 
 const passwordForgotSchema = z.object({
@@ -18,7 +19,9 @@ export const passwordForgot = async (
   formData: FormData,
 ) => {
   try {
-    const { email } = passwordForgotSchema.parse(Object.fromEntries(formData));
+    const { email } = passwordForgotSchema.parse({
+      email: formData.get('email'),
+    });
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -29,7 +32,7 @@ export const passwordForgot = async (
     }
 
     const passwordResetLink = await generatePasswordResetLink(user.id);
-    console.log(passwordResetLink);
+    await sendEmailPasswordReset(user.username, user.email, passwordResetLink);
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }
