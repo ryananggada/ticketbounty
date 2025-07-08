@@ -41,6 +41,7 @@ model User {
   comments                Comment[]
   passwordResetTokens     PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
+  memberships             Membership[]
 }
 
 model Comment {
@@ -60,7 +61,7 @@ model Session {
   id        String   @id
   expiresAt DateTime
   userId    String
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -69,7 +70,7 @@ model PasswordResetToken {
   tokenHash String   @unique
   expiresAt DateTime
   userId    String
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -80,7 +81,28 @@ model EmailVerificationToken {
   expiresAt DateTime
   email     String
   userId    String
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
+}
+
+model Organization {
+  id          String       @id @default(cuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
+}
+
+model Membership {
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  joinedAt       DateTime     @default(now())
+  isActive       Boolean
+
+  @@id(name: "membershipId", [organizationId, userId])
+  @@index([organizationId])
   @@index([userId])
 }

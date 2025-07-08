@@ -9,7 +9,11 @@ import { getAuthOrRedirect } from '../queries/get-auth-or-redirect';
 import { generateEmailVerificationCode } from '../utils/generate-email-verification-code';
 
 export const emailVerificationResend = async () => {
-  const { user } = await getAuthOrRedirect({ checkEmailVerified: false });
+  const { user } = await getAuthOrRedirect({
+    checkEmailVerified: false,
+    checkOrganization: false,
+    checkActiveOrganization: false,
+  });
 
   try {
     const verificationCode = await generateEmailVerificationCode(
