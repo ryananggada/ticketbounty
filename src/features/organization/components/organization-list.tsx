@@ -4,6 +4,7 @@ import {
   ArrowUpRightFromSquare,
   PenIcon,
 } from 'lucide-react';
+import Link from 'next/link';
 import { SubmitButton } from '@/components/form/submit-button';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { MembershipDeleteButton } from '@/features/membership/components/membership-delete-button';
+import { membershipsPath } from '@/paths';
 import { getOrganizationsByUser } from '../queries/get-organizations-by-user';
 import { OrganizationDeleteButton } from './organization-delete-button';
 import { OrganizationSwitchButton } from './organization-switch-button';
@@ -63,8 +66,10 @@ const OrganizationList = async ({ limitedAccess }: OrganizationListProps) => {
           );
 
           const detailButton = (
-            <Button variant="outline" size="icon">
-              <ArrowUpRightFromSquare className="w-4 h-4" />
+            <Button variant="outline" size="icon" asChild>
+              <Link href={membershipsPath(organization.id)}>
+                <ArrowUpRightFromSquare className="w-4 h-4" />
+              </Link>
             </Button>
           );
 
@@ -72,6 +77,13 @@ const OrganizationList = async ({ limitedAccess }: OrganizationListProps) => {
             <Button variant="outline" size="icon">
               <PenIcon className="w-4 h-4" />
             </Button>
+          );
+
+          const leaveButton = (
+            <MembershipDeleteButton
+              organizationId={organization.id}
+              userId={organization.membershipByUser.userId}
+            />
           );
 
           const deleteButton = (
@@ -83,6 +95,7 @@ const OrganizationList = async ({ limitedAccess }: OrganizationListProps) => {
               {switchButton}
               {limitedAccess ? null : detailButton}
               {limitedAccess ? null : editButton}
+              {limitedAccess ? null : leaveButton}
               {limitedAccess ? null : deleteButton}
             </>
           );
