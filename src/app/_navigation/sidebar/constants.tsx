@@ -1,8 +1,15 @@
-import { BookIcon, CircleUserIcon, LibraryIcon, UsersIcon } from 'lucide-react';
+import {
+  BookCopyIcon,
+  BookIcon,
+  CircleUserIcon,
+  LibraryIcon,
+  UsersIcon,
+} from 'lucide-react';
 import {
   accountProfilePath,
   homePath,
   organizationsPath,
+  ticketsByOrganizationPath,
   ticketsPath,
 } from '@/paths';
 import { NavItem } from './types';
@@ -12,6 +19,11 @@ export const navItems: NavItem[] = [
     title: 'All Tickets',
     icon: <LibraryIcon />,
     href: homePath(),
+  },
+  {
+    title: 'Our Tickets',
+    icon: <BookCopyIcon />,
+    href: ticketsByOrganizationPath(),
   },
   {
     title: 'My Tickets',
