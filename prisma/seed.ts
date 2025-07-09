@@ -12,7 +12,7 @@ const users = [
   {
     username: 'user1',
     email: 'user1@mail.com',
-    emailVerified: false,
+    emailVerified: true,
   },
 ];
 
@@ -77,11 +77,13 @@ const seed = async () => {
         userId: dbUsers[0].id,
         organizationId: dbOrganization.id,
         isActive: true,
+        membershipRole: 'ADMIN',
       },
       {
         userId: dbUsers[1].id,
         organizationId: dbOrganization.id,
         isActive: false,
+        membershipRole: 'MEMBER',
       },
     ],
   });
